@@ -55,6 +55,21 @@ const AdminProductsPage: NextPageWithLayout = () => {
       key: "category",
     },
     {
+      title: "Precio",
+      dataIndex: "price",
+      key: "price",
+      render: (_, record) => {
+        return (
+          <>
+            {record.price?.toLocaleString("co-ES", {
+              style: "currency",
+              currency: "COP",
+            })}
+          </>
+        );
+      },
+    },
+    {
       title: "Sucursal",
       key: "branch",
       dataIndex: "branch",

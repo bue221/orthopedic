@@ -8,15 +8,12 @@ import { Avatar, Card } from "antd";
 
 const { Meta } = Card;
 
-const CardProduct: React.FC = () => (
+const CardProduct: React.FC<any> = ({ photo, name, description, price }) => (
   <Card
     style={{ width: 300 }}
     cover={
       // eslint-disable-next-line @next/next/no-img-element
-      <img
-        alt="example"
-        src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-      />
+      <img alt={name} src={photo} />
     }
     actions={[
       <SettingOutlined key="setting" />,
@@ -24,11 +21,13 @@ const CardProduct: React.FC = () => (
       <EllipsisOutlined key="ellipsis" />,
     ]}
   >
-    <Meta
-      avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-      title="Card title"
-      description="This is the description"
-    />
+    <Meta title={name} description={description} />
+    <p className="mt-3">
+      {price?.toLocaleString("co-ES", {
+        style: "currency",
+        currency: "COP",
+      })}
+    </p>
   </Card>
 );
 
