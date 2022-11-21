@@ -10,7 +10,7 @@ interface DataType {
   tags: string[];
 }
 
-const columns: ColumnsType<DataType> = [
+const columnsD: ColumnsType<DataType> = [
   {
     title: "Name",
     dataIndex: "name",
@@ -59,7 +59,7 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [
+const dataD: DataType[] = [
   {
     key: "1",
     name: "John Brown",
@@ -83,7 +83,10 @@ const data: DataType[] = [
   },
 ];
 
-const CustomTable: React.FC = () => (
+const CustomTable: React.FC<{
+  data?: any[];
+  columns?: ColumnsType<any>;
+}> = ({ data = dataD, columns = columnsD }) => (
   <Table columns={columns} dataSource={data} />
 );
 
