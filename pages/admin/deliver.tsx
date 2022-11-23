@@ -1,6 +1,7 @@
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Button, Form, Select, Typography } from "antd";
 import React, { useEffect, useState } from "react";
+import useNotify from "src/hooks/useNotify";
 import AdminLayout from "src/layouts/admin";
 import { NextPageWithLayout } from "src/types/app.interfaces";
 
@@ -11,6 +12,8 @@ const AdminIndexPage: NextPageWithLayout = () => {
   const onFinish = (values: any) => {
     console.log(values);
   };
+  const [form] = Form.useForm();
+  const { toast } = useNotify();
 
   //supabase
   const supabase = useSupabaseClient();
@@ -26,11 +29,39 @@ const AdminIndexPage: NextPageWithLayout = () => {
     })();
   }, [supabase]);
 
+  const handleOk = async () => {
+    try {
+      // form
+      await form.validateFields();
+      const values: any = form.getFieldsValue();
+      form.resetFields();
+      // service consume
+      try {
+        const { status, error } = await supabase
+          .from("product")
+          .update({
+            avaliable: true,
+          })
+          .eq("id", values.product);
+
+        if (status === 200 || status === 204) {
+          toast("success", {
+            message: "Producto recibido",
+          });
+        } else toast("error", { message: error?.message });
+      } catch (error) {
+        toast("error", { message: "Error al recibir el Producto" });
+      } finally {
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  };
   return (
     <AdminLayout>
       <>
         <Title className="text-center">Entrega de productos</Title>
-        <Form layout="vertical" name="control-hooks" onFinish={onFinish}>
+        <Form form={form} layout="vertical" name="control-hooks">
           <Form.Item
             name="product"
             label="Seleccionar producto"
@@ -54,7 +85,9 @@ const AdminIndexPage: NextPageWithLayout = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button htmlType="button">Devolucion del producto</Button>
+            <Button htmlType="button" onClick={handleOk}>
+              Devolucion del producto
+            </Button>
             <Button danger htmlType="button">
               Cancelar reserva
             </Button>

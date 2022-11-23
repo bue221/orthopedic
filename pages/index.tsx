@@ -19,8 +19,11 @@ const Home: NextPageWithLayout = () => {
   const supabase = useSupabaseClient();
   // get products
   const [products, setProducts] = useState<any[]>();
+  const [branchs, setBranchs] = useState<any[]>();
   useEffect(() => {
     (async () => {
+      const { data: branchRes } = await supabase.from("branch").select("*");
+      setBranchs(branchRes as any);
       const { data } = await supabase
         .from("product")
         .select("*, branch!inner(*)")
@@ -51,7 +54,7 @@ const Home: NextPageWithLayout = () => {
         </Carousel>
         <div className="flex flex-wrap items-center justify-center gap-8 mt-4">
           {products?.map((i) => (
-            <CardProduct key={i.id} {...i} />
+            <CardProduct key={i.id} branchs={branchs} {...i} />
           ))}
         </div>
         <div className="fixed top-56 right-0 p-4 bg-white shadow-xl rounded-l-full flex gap-2 cursor-pointer hover:shadow-2xl">

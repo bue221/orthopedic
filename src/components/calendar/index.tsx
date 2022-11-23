@@ -5,6 +5,7 @@ import type { Dayjs } from "dayjs";
 
 const getListData = (value: Dayjs) => {
   let listData;
+  console.log(value.date(), new Date().getDay());
   switch (value.date()) {
     case 8:
       listData = [
@@ -54,7 +55,13 @@ const CustomCalendar: React.FC = () => {
   const dateCellRender = (value: Dayjs) => {
     const listData = getListData(value);
     return (
-      <ul className="events">
+      <ul
+        className="events"
+        onClick={() => {
+          setSelectDay(getListData(value));
+          showModal();
+        }}
+      >
         {listData.map((item) => (
           <li key={item.content}>
             <Badge
@@ -84,10 +91,7 @@ const CustomCalendar: React.FC = () => {
   return (
     <>
       <Calendar
-        onSelect={(date) => {
-          setSelectDay(getListData(date));
-          showModal();
-        }}
+        onSelect={(date) => {}}
         dateCellRender={dateCellRender}
         monthCellRender={monthCellRender}
       />

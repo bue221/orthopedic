@@ -7,6 +7,9 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
+import { useRouter } from "next/router";
+import { supabase } from "@supabase/auth-ui-react/dist/esm/common/theming";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -14,6 +17,8 @@ const AdminLayout: React.FC<{ children: React.ReactElement }> = ({
   children,
 }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const router = useRouter();
+  const supabase = useSupabaseClient();
 
   return (
     <div className="h-screen">
@@ -23,22 +28,49 @@ const AdminLayout: React.FC<{ children: React.ReactElement }> = ({
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            // selectedKeys={["1", "2", "3", "4"]}
             items={[
               {
                 key: "1",
                 icon: <UserOutlined />,
-                label: "nav 1",
+                label: <div onClick={() => router.push("/admin/")}>Inicio</div>,
               },
               {
                 key: "2",
                 icon: <VideoCameraOutlined />,
-                label: "nav 2",
+                label: (
+                  <div onClick={() => router.push("/admin/products")}>
+                    Productos
+                  </div>
+                ),
               },
               {
                 key: "3",
                 icon: <UploadOutlined />,
-                label: "nav 3",
+                label: (
+                  <div onClick={() => router.push("/admin/branchs")}>
+                    Sucursales
+                  </div>
+                ),
+              },
+              {
+                key: "5",
+                icon: <UploadOutlined />,
+                label: (
+                  <div onClick={() => router.push("/admin/deliver")}>
+                    Recibir un producto
+                  </div>
+                ),
+              },
+              {
+                key: "4",
+                // type: "divider",
+                label: (
+                  <div onClick={async () => await supabase.auth.signOut()}>
+                    Cerar sesión
+                  </div>
+                ),
+                danger: true,
               },
             ]}
           />
